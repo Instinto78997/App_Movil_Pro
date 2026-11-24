@@ -5,7 +5,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import { AppColors, AppRadii } from '../constants/theme';
 import { FaceLiveness, FaceLivenessHandle } from '../components/face-liveness';
-import { createLivenessSession, getLivenessResult, getProfile, profileImageToBase64 } from '../services/api';
+import { createLivenessSession, getLivenessResult, getProfile, profileImageToBase64, verifyLiveness } from '../services/api';
 
 export default function LivenessScreen() {
   const params = useLocalSearchParams<{ mode?: string; id?: string }>();
@@ -65,6 +65,10 @@ export default function LivenessScreen() {
     try {
       const completed = await detector.current.start();
       if (!completed.isLive) throw new Error('La verificación de presencia no se completó.');
+      const liveness = await verifyLiveness(sessionId);
+      if (!liveness.isLive) {
+        throw new Error(liveness.message ?? 'AWS no aprobó la prueba de presencia. Inténtalo de nuevo.');
+      }
       const result = await getLivenessResult({
         sessionId,
         identifyAll: mode === 'login',

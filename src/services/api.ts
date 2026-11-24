@@ -7,6 +7,8 @@ const LIVENESS_SESSION_URL =
   'https://nd7y2nxc6jjr3qk7xvokvt72fa0srqlx.lambda-url.us-east-1.on.aws/';
 const LIVENESS_RESULT_URL =
   'https://j7ox5a3vryaornjffihgqf3wha0psckv.lambda-url.us-east-1.on.aws/';
+const LIVENESS_VERIFY_URL =
+  'https://yndwlrwwqowfj6ttaeeazyrlu40fhxoo.lambda-url.us-east-1.on.aws/';
 
 export type ApiUser = {
   id: number;
@@ -40,6 +42,16 @@ export type LivenessResult = {
   isMatch?: boolean;
   similarity?: number;
   user?: ApiUser;
+  message?: string;
+};
+
+export type LivenessVerification = {
+  success?: boolean;
+  livenessConfidence?: number;
+  livenessStatus?: string;
+  minimumConfidence?: number;
+  isLive?: boolean;
+  feedback?: string[];
   message?: string;
 };
 
@@ -266,6 +278,29 @@ export async function createLivenessSession(): Promise<string> {
   const sessionId = body.sessionId ?? body.SessionId;
   if (!sessionId) throw new Error('La Lambda no devolvió un sessionId.');
   return String(sessionId);
+}
+
+/**
+ * Third Lambda in the facial workflow. It confirms server-side that the
+ * Face Liveness session passed before the identification Lambda is called.
+ */
+export async function verifyLiveness(sessionId: string): Promise<LivenessVerification> {
+  const response = await fetch(LIVENESS_VERIFY_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({ sessionId }),
+  });
+  const result = await readJson<Record<string, any>>(response);
+  const data = unwrapLivenessResult(result);
+  return {
+    success: data.success,
+    livenessConfidence: Number(data.livenessConfidence ?? data.confidence ?? 0) || undefined,
+    livenessStatus: data.livenessStatus ?? data.status,
+    minimumConfidence: Number(data.minimumConfidence ?? 0) || undefined,
+    isLive: data.isLive ?? data.success,
+    feedback: Array.isArray(data.feedback) ? data.feedback.map(String) : undefined,
+    message: data.message ?? data.error,
+  };
 }
 
 export async function getLivenessResult(input: {

@@ -19,7 +19,8 @@ El login espera un objeto de usuario con al menos `id`; interpreta `nombre`/`nom
 | Operación | Método y URL | Solicitud |
 | --- | --- | --- |
 | Crear sesión | `GET https://nd7y2nxc6jjr3qk7xvokvt72fa0srqlx.lambda-url.us-east-1.on.aws/` | Sin cuerpo; se espera un `sessionId` como texto o dentro de un objeto JSON |
-| Consultar resultado | `POST https://j7ox5a3vryaornjffihgqf3wha0psckv.lambda-url.us-east-1.on.aws/` | `{ "sessionId": "...", "identifyAll": true }` para login facial; para verificar el perfil se envía además `profileImageBase64` y `identifyAll: false` |
+| Verificar presencia | `POST https://yndwlrwwqowfj6ttaeeazyrlu40fhxoo.lambda-url.us-east-1.on.aws/` | `{ "sessionId": "..." }`; confirma en el servidor que AWS aprobó Face Liveness antes de identificar el rostro |
+| Consultar resultado e identificar | `POST https://j7ox5a3vryaornjffihgqf3wha0psckv.lambda-url.us-east-1.on.aws/` | `{ "sessionId": "...", "identifyAll": true }` para login facial; para verificar el perfil se envía además `profileImageBase64` y `identifyAll: false` |
 
 El resultado usado por la app incluye `isMatch`, `similarity`, `livenessConfidence`, `livenessStatus`, `message` y, en login facial, `user` con `id`, nombre, apellidos, correo y rol.
 
