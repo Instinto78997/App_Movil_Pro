@@ -2,6 +2,7 @@
 
 # dependencies
 node_modules/
+lambda/
 
 # Expo
 .expo/
@@ -25,6 +26,10 @@ expo-env.d.ts
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+
+# Build and deployment artifacts
+*.apk
+lambda/*-deploy.zip
 
 # macOS
 .DS_Store

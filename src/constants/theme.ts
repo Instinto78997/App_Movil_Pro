@@ -9,19 +9,43 @@ import { Platform } from 'react-native';
 
 export const Colors = {
   light: {
-    text: '#000000',
-    background: '#ffffff',
-    backgroundElement: '#F0F0F3',
-    backgroundSelected: '#E0E1E6',
-    textSecondary: '#60646C',
+    text: '#0D1F23',
+    background: '#AFB3B7',
+    backgroundElement: '#F4F6F7',
+    backgroundSelected: '#69818D',
+    textSecondary: '#5A636A',
   },
   dark: {
-    text: '#ffffff',
-    background: '#000000',
-    backgroundElement: '#212225',
-    backgroundSelected: '#2E3135',
-    textSecondary: '#B0B4BA',
+    text: '#F5F7F8',
+    background: '#0D1F23',
+    backgroundElement: '#132E35',
+    backgroundSelected: '#2D4A53',
+    textSecondary: '#AFB3B7',
   },
+} as const;
+
+/** Palette supplied for the Restaurante App visual system. */
+export const AppColors = {
+  night: '#0D1F23',
+  deep: '#132E35',
+  ocean: '#2D4A53',
+  mist: '#69818D',
+  silver: '#AFB3B7',
+  slate: '#5A636A',
+  white: '#F5F7F8',
+  transparentSilver: 'rgba(175, 179, 183, 0.13)',
+  transparentWhite: 'rgba(245, 247, 248, 0.08)',
+  transparentDark: 'rgba(13, 31, 35, 0.48)',
+  success: '#B7D5C9',
+  danger: '#E9B5B5',
+} as const;
+
+export const AppRadii = {
+  input: 20,
+  button: 24,
+  card: 32,
+  pill: 999,
+  avatar: 999,
 } as const;
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;

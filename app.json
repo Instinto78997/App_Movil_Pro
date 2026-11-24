@@ -6,13 +6,20 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "restauranteapp",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0D1F23",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "com.restaurante.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "La cámara se usa para registrar la foto de perfil y verificar tu identidad."
+      }
     },
     "android": {
+      "package": "com.restaurante.app",
+      "permissions": ["android.permission.CAMERA", "android.permission.INTERNET"],
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#0D1F23",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -28,12 +35,30 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#0D1F23",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Permite usar la cámara para tomar tu foto de perfil.",
+          "photosPermission": "Permite seleccionar una foto de perfil desde tu galería.",
+          "microphonePermission": false
+        }
+      ],
+      [
+        "@blacktomang/expo-aws-liveness",
+        {
+          "cameraPermission": "Permite usar la cámara para verificar tu identidad."
+        }
+      ],
+      "./plugins/with-android-liveness-workaround.js"
     ],
+    "extra": {
+      "awsIdentityPoolId": "us-east-1:d0fb2822-8d57-4c1f-8f02-034bf905a586"
+    },
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
